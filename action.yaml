@@ -1,0 +1,22 @@
+name: "Trivy scan"
+description: "Trivy container image scan - Docker file check"
+author: "Sunil Jacob"
+branding:
+  icon: "check"
+  color: "green"
+inputs: 
+  file:
+    description: "Docker file"
+    required: true
+  output:
+    description: "Output format for results"
+    default: "stdout"
+runs:
+  using: 'composite'
+  steps:
+    - run: cat $docker_file > ${{ github.action_path }}/Dockerfile
+      env:
+        docker_file: ${{ inputs.file }}
+      shell: bash
+    - run: ${{ github.action_path }}/trivy-docker-image-scan.sh
+      shell: bash
